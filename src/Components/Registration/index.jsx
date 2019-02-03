@@ -1,6 +1,6 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
-import { connect } from 'react-redux';
-import { tryReg } from '../../actions';
+import connect from './connect';
 import {
   FormContainer,
   FormButton,
@@ -34,13 +34,33 @@ class Registration extends React.Component {
     event.preventDefault();
     const state = { ...this.state };
     const props = { ...this.props };
-    if (state.invalid) {
+    if (!state.schema.firstName.test(state.firstName)) {
       return this.setState({
         password: '',
+        invalid: 'first name',
+      });
+    }
+    if (!state.schema.lastName.test(state.lastName)) {
+      return this.setState({
+        password: '',
+        invalid: 'last name',
+      });
+    }
+    if (!state.schema.email.test(state.email)) {
+      return this.setState({
+        password: '',
+        invalid: 'email',
+      });
+    }
+    if (!state.schema.password.test(state.password)) {
+      return this.setState({
+        password: '',
+        invalid: 'password',
       });
     }
     this.setState({
       password: '',
+      invalid: '',
     });
     const userParams = {
       firstName: state.firstName,
@@ -93,7 +113,13 @@ class Registration extends React.Component {
         <FormContainer>
           <StyledForm noValidate onSubmit={this.handleForm}>
             <FormTitle>Registration</FormTitle>
-            {state.invalid ? <WarningMessge>{`Incorrect ${state.invalid} `}</WarningMessge> : ''}
+            {state.invalid ? (
+              <WarningMessge>{`Incorrect ${state.invalid} `}</WarningMessge>
+            ) : props.store.invalidReg ? (
+              <WarningMessge>{props.store.reason}</WarningMessge>
+            ) : (
+              ''
+            )}
             <FormInput
               placeholder="First name"
               type="text"
@@ -140,17 +166,12 @@ class Registration extends React.Component {
         </FormContainer>
       );
     }
-    return <FormTitle>Reg: true</FormTitle>;
+    return (
+      <FormContainer>
+        <FormTitle>Registered!</FormTitle>
+      </FormContainer>
+    );
   }
 }
 
-export default connect(
-  state => ({
-    store: state.reg,
-  }),
-  dispatch => ({
-    tryReg: (userParams) => {
-      dispatch(tryReg(userParams));
-    },
-  }),
-)(Registration);
+export default connect(Registration);

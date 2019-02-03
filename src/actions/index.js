@@ -28,11 +28,10 @@ const checkReg = response => (dispatch) => {
   if (response.reg) {
     return dispatch(regSucces());
   }
-  return dispatch(regFail(response));
+  return dispatch(regFail(response.reason));
 };
 
 const recieveUserProps = response => (dispatch) => {
-  console.log(response.userResponse);
   if (response.log) {
     dispatch(login(response.userResponse));
     return history.push('/profile');
@@ -53,7 +52,7 @@ export const tryLog = userParams => (dispatch) => {
       userParams,
     }),
   };
-  return fetch('http://localhost:4200/api/users/login', logOptions)
+  return fetch('/api/users/login', logOptions)
     .then(response => response.json(), error => console.error(error))
     .then((json) => {
       dispatch(recieveUserProps(json));
@@ -71,16 +70,8 @@ export const tryReg = userParams => (dispatch) => {
       userParams,
     }),
   };
-  return fetch('http://localhost:4200/api/users/registration', regOptions)
-    .then(
-      (response) => {
-        if (response.ok) {
-          return response.json();
-        }
-        return Promise.reject();
-      },
-      err => Promise.reject(err),
-    )
+  return fetch('/api/users/registration', regOptions)
+    .then(response => response.json(), err => Promise.reject(err))
     .then(
       (json) => {
         dispatch(checkReg(json));

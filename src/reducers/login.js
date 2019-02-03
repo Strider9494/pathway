@@ -2,7 +2,7 @@ import actions from '../actions';
 
 const logState = {
   log: false,
-  user: '',
+  user: {},
   invalidLog: false,
   reason: '',
 };
@@ -18,7 +18,7 @@ const login = (state = logState, action) => {
         reason: '',
       };
     case actions.LOG_OUT:
-      return { ...state, log: false, user: '' };
+      return { ...state, log: false, user: {} };
     case actions.LOG_FAIL:
       return { ...state, invalidLog: true, reason: action.reason };
     default:

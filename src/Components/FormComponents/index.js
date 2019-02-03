@@ -14,6 +14,14 @@ export const FormContainer = styled.section`
   align-items: center;
   justify-content: center;
   font-family: 'Source Sans Pro', sans-serif;
+
+  @media (max-width: 750px) {
+    width:300px;
+  }
+
+  @media (max-width: 450px) {
+    width:200px;
+  }
 `;
 
 export const StyledForm = styled.form`
@@ -22,6 +30,10 @@ export const StyledForm = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 450px) {
+    width: 170px;
+  }
 `;
 
 export const FormTitle = styled.h1`
@@ -45,6 +57,7 @@ export const WarningMessge = styled.div`
 export const FormButton = styled.button`
   width: 100%;
   height: 40px;
+  margin-bottom: 15px;
   cursor: pointer;
   color: #f5f6fa;
   background: #487eb0;
@@ -55,6 +68,10 @@ export const FormButton = styled.button`
   font-size: 1em;
   :hover {
     background: #0097e6;
+  }
+
+  @media (max-width: 450px) {
+    font-size: 0.9em;
   }
 `;
 
@@ -68,4 +85,8 @@ export const FormInput = styled.input`
   padding: 5px;
   font-family: inherit;
   font-size: 1.2em;
+
+  @media (max-width: 450px) {
+    font-size: 0.9em;
+  }
 `;

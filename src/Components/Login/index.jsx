@@ -1,6 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { tryLog } from '../../actions';
+import connect from './connect';
+import history from '../../history';
 import {
   FormContainer,
   FormButton,
@@ -16,7 +16,6 @@ class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
-      invalid: '',
       schema: {
         email: /^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$/,
         password: /^[a-zA-Z0-9]{8,16}$/,
@@ -28,20 +27,7 @@ class Login extends React.Component {
     event.preventDefault();
     const state = { ...this.state };
     const props = { ...this.props };
-    if (!state.schema.email.test(state.email)) {
-      return this.setState({
-        invalid: 'email',
-        password: '',
-      });
-    }
-    if (!state.schema.password.test(state.password)) {
-      return this.setState({
-        invalid: 'password',
-        password: '',
-      });
-    }
     this.setState({
-      invalid: '',
       password: '',
     });
     const userParams = {
@@ -59,6 +45,12 @@ class Login extends React.Component {
     });
   };
 
+  toRegistration = () => {
+    const props = { ...this.props };
+    props.toReg();
+    history.push('/registration');
+  };
+
   render() {
     const state = { ...this.state };
     const props = { ...this.props };
@@ -66,7 +58,6 @@ class Login extends React.Component {
       <FormContainer>
         <StyledForm noValidate onSubmit={this.handleForm}>
           <FormTitle>Log in</FormTitle>
-          {state.invalid ? <WarningMessge>{`Incorrect ${state.invalid} `}</WarningMessge> : ''}
           {props.store.invalidLog ? <WarningMessge>Incorrect email or password</WarningMessge> : ''}
           <FormInput
             placeholder="Email"
@@ -82,20 +73,14 @@ class Login extends React.Component {
             onChange={this.handleChange}
             data-id="password"
           />
-          <FormButton>Log in</FormButton>
+          <FormButton type="submit">Log in</FormButton>
+          <FormButton type="button" onClick={this.toRegistration}>
+            Registration
+          </FormButton>
         </StyledForm>
       </FormContainer>
     );
   }
 }
 
-export default connect(
-  state => ({
-    store: state.login,
-  }),
-  dispatch => ({
-    tryLog: (userParams) => {
-      dispatch(tryLog(userParams));
-    },
-  }),
-)(Login);
+export default connect(Login);

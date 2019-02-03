@@ -1,7 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { logOut } from '../../actions';
+import connect from './connect';
 import {
   HeaderConteiner, HeaderTitle, NavConteiner, StyledLink, LogOutBut,
 } from './style';
@@ -26,11 +25,4 @@ Header.propTypes = {
   loggingOut: PropTypes.func.isRequired,
 };
 
-export default connect(
-  state => ({ store: state.login }),
-  dispatch => ({
-    loggingOut: () => {
-      dispatch(logOut());
-    },
-  }),
-)(Header);
+export default connect(Header);
